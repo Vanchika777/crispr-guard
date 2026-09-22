@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ──────────────────────────────────────────────────── */
+:root {
+  /* Core Palette */
+  --color-bg:          #FFFCE1;
+  --color-text:        #2C5745;
+  --color-card:        #E8F5E9;
+  --color-border:      #A5D6A7;
+  --color-btn:         #2C5745;
+  --color-btn-text:    #ffffff;
+
+  /* Risk Colors */
+  --color-low-bg:      #A5D6A7;
+  --color-low-text:    #2C5745;
+  --color-mod-bg:      #FFDDB0;
+  --color-mod-text:    #EB7D00;
+  --color-high-bg:     #F5DEDE;
+  --color-high-text:   #8B2626;
+
+  /* Accents */
+  --color-peach:       #FFBE91;
+  --color-butter:      #FFF4BF;
+  --color-sky:         #CFEBFF;
+  --color-crimson:     #8B2626;
+
+  /* Spacing & Shape */
+  --radius-card:       1rem;
+  --shadow-card:       0 2px 8px rgba(44,87,69,0.08);
+}
+
+/* ── Base Resets ────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Custom Scrollbar ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #E8F5E9;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #A5D6A7;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2C5745;
+}
+
+/* ── Layer Components ───────────────────────────────────────────────────────── */
+@layer components {
+  /* Card containers */
+  .card {
+    @apply bg-mint rounded-2xl border border-sage p-6 shadow-card;
+  }
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-forest text-white font-semibold px-6 py-3 rounded-xl
+           transition-all duration-200 hover:bg-forest-600 active:scale-95
+           focus:outline-none focus:ring-2 focus:ring-skyblue focus:ring-offset-2
+           shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply bg-mint text-forest border border-sage font-medium px-4 py-2 rounded-lg
+           transition-all duration-200 hover:bg-sage-light hover:border-sage-dark
+           focus:outline-none focus:ring-2 focus:ring-skyblue;
+  }
+
+  /* Input fields */
+  .input-field {
+    @apply bg-white border-2 border-sage rounded-xl px-4 py-3 text-forest
+           font-mono text-base w-full outline-none
+           transition-all duration-200
+           focus:border-skyblue-dark focus:ring-2 focus:ring-skyblue
+           placeholder:text-forest/40;
+  }
+
+  /* Risk badges */
+  .badge-low {
+    @apply bg-sage text-forest font-semibold text-xs px-2.5 py-1 rounded-full;
+  }
+  .badge-moderate {
+    @apply bg-amber-light text-amber-warn font-semibold text-xs px-2.5 py-1 rounded-full;
+  }
+  .badge-high {
+    @apply bg-crimson-light text-crimson font-semibold text-xs px-2.5 py-1 rounded-full;
+  }
+
+  /* Section labels */
+  .section-title {
+    @apply text-forest font-bold text-lg tracking-tight;
+  }
+  .section-subtitle {
+    @apply text-forest/60 text-sm font-normal;
+  }
+
+  /* Metric value */
+  .metric-value {
+    @apply text-forest font-extrabold text-4xl tracking-tight;
+  }
+  .metric-label {
+    @apply text-forest/60 text-sm font-medium uppercase tracking-wider;
+  }
+
+  /* DNA sequence mono display */
+  .dna-sequence {
+    @apply font-mono text-sm tracking-widest;
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    @apply bg-mint animate-pulse rounded-lg;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-sage border-t my-4;
+  }
+
+  /* Chromosome track wrapper */
+  .chromosome-track {
+    @apply relative flex items-center h-12 rounded-full overflow-hidden;
+    background: linear-gradient(90deg, #E8F5E9 0%, #C8E6C9 50%, #E8F5E9 100%);
+  }
+
+  /* Glowing pin */
+  .pin-high {
+    @apply w-3 h-3 rounded-full bg-crimson absolute -translate-x-1/2 animate-glow-crimson cursor-pointer;
+    box-shadow: 0 0 8px 2px rgba(139,38,38,0.5);
+  }
+  .pin-low {
+    @apply w-2.5 h-2.5 rounded-full bg-sage absolute -translate-x-1/2 animate-glow-sage cursor-pointer;
+    box-shadow: 0 0 6px 2px rgba(165,214,167,0.5);
+  }
+  .pin-moderate {
+    @apply w-2.5 h-2.5 rounded-full absolute -translate-x-1/2 cursor-pointer;
+    background-color: #EB7D00;
+    box-shadow: 0 0 6px 2px rgba(235,125,0,0.4);
+  }
+}
+
+/* ── Utility Overrides ──────────────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-text-forest {
+    background: linear-gradient(135deg, #2C5745 0%, #3D7560 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated underline */
+  .underline-forest {
+    @apply relative;
+  }
+  .underline-forest::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-forest transition-all duration-300;
+  }
+  .underline-forest:hover::after {
+    @apply w-full;
+  }
+
+  /* SVG circle progress animation */
+  .circle-progress {
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Table row hover */
+  .table-row-hover {
+    @apply transition-colors duration-150 hover:bg-mint/70;
+  }
+
+  /* Fade in animation utility */
+  .animate-in {
+    animation: fadeIn 0.4s ease-out both;
+  }
+
+  /* Blur overlay for loading */
+  .overlay-blur {
+    @apply absolute inset-0 backdrop-blur-sm bg-cream/60 rounded-2xl flex items-center justify-center;
+  }
+}
+
+/* ── Recharts Overrides ─────────────────────────────────────────────────────── */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #A5D6A7;
+  stroke-opacity: 0.4;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  background-color: #E8F5E9 !important;
+  border: 1px solid #A5D6A7 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 4px 12px rgba(44,87,69,0.12) !important;
+}
+
+.recharts-tooltip-label {
+  color: #2C5745 !important;
+  font-weight: 600 !important;
+}
+
+.recharts-tooltip-item {
+  color: #2C5745 !important;
+}
+
+/* ── DNA Sequence Mismatch Highlighting ─────────────────────────────────────── */
+.dna-match {
+  color: #2C5745;
+}
+.dna-mismatch {
+  color: #8B2626;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+/* ── Gauge SVG ──────────────────────────────────────────────────────────────── */
+.gauge-circle-bg {
+  fill: none;
+  stroke: #E8F5E9;
+  stroke-width: 16;
+}
+.gauge-circle-safe {
+  fill: none;
+  stroke: #A5D6A7;
+  stroke-width: 16;
+  stroke-linecap: round;
+}
+.gauge-circle-warn {
+  fill: none;
+  stroke: #EB7D00;
+  stroke-width: 16;
+  stroke-linecap: round;
+}
+.gauge-circle-danger {
+  fill: none;
+  stroke: #8B2626;
+  stroke-width: 16;
+  stroke-linecap: round;
+}
