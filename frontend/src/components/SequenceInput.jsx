@@ -1,5 +1,13 @@
 import { useState, useCallback } from "react";
-import { Search, ChevronRight, Dna, AlertCircle, CheckCircle2, Loader2, FlaskConical } from "lucide-react";
+import {
+  Search,
+  ChevronRight,
+  Dna,
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+  FlaskConical,
+} from "lucide-react";
 import clsx from "clsx";
 
 // ── Preset Sequences ───────────────────────────────────────────────────────────
@@ -43,8 +51,11 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
   const validateSequence = useCallback((seq) => {
     const upper = seq.toUpperCase().trim();
     if (upper.length === 0) return "Please enter a guide RNA sequence.";
-    if (upper.length !== 20) return `Sequence must be exactly 20 bp. Current: ${upper.length} bp.`;
-    const invalid = [...new Set(upper.split(""))].filter((c) => !VALID_CHARS.has(c));
+    if (upper.length !== 20)
+      return `Sequence must be exactly 20 bp. Current: ${upper.length} bp.`;
+    const invalid = [...new Set(upper.split(""))].filter(
+      (c) => !VALID_CHARS.has(c),
+    );
     if (invalid.length > 0)
       return `Invalid characters detected: ${invalid.join(", ")}. Only A, C, G, T are allowed.`;
     return null;
@@ -69,7 +80,9 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/predict", {
+      const API_URL =
+        import.meta.env.VITE_API_URL || "https://crispr-guard.onrender.com";
+      const response = await fetch(`${API_URL}/api/v1/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ grna_sequence: sequence }),
@@ -83,11 +96,12 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
       const data = await response.json();
       onResult(data);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown error occurred.";
+      const message =
+        err instanceof Error ? err.message : "Unknown error occurred.";
       setError(
         message.includes("fetch")
           ? "Cannot connect to CRISPR-Guard API. Ensure the backend is running at localhost:8000."
-          : message
+          : message,
       );
     } finally {
       setIsLoading(false);
@@ -132,7 +146,7 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
               key={i}
               className={clsx(
                 "font-bold transition-colors",
-                colorMap[char.toUpperCase()] || "text-forest/30"
+                colorMap[char.toUpperCase()] || "text-forest/30",
               )}
             >
               {char || "·"}
@@ -159,8 +173,9 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
             maxLength={20}
             className={clsx(
               "input-field pl-10 pr-20 font-mono uppercase text-base tracking-widest",
-              error && "border-crimson focus:border-crimson focus:ring-crimson/20",
-              isValid && sequence.length === 20 && "border-sage-dark"
+              error &&
+                "border-crimson focus:border-crimson focus:ring-crimson/20",
+              isValid && sequence.length === 20 && "border-sage-dark",
             )}
             aria-label="Guide RNA sequence input"
             aria-describedby="sequence-helper"
@@ -175,8 +190,8 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
                 sequence.length === 20
                   ? "text-sage-dark"
                   : sequence.length > 20
-                  ? "text-crimson"
-                  : "text-forest/40"
+                    ? "text-crimson"
+                    : "text-forest/40",
               )}
             >
               {sequence.length}/20
@@ -192,7 +207,7 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
           id="sequence-helper"
           className={clsx(
             "mt-2 flex items-start gap-1.5 text-xs min-h-[1.25rem]",
-            error ? "text-crimson" : "text-forest/50"
+            error ? "text-crimson" : "text-forest/50",
           )}
         >
           {error ? (
@@ -202,8 +217,8 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
             </>
           ) : (
             <span>
-              Accepts 20-nucleotide sequences using ACGT alphabet only. PAM (NGG) is added
-              automatically.
+              Accepts 20-nucleotide sequences using ACGT alphabet only. PAM
+              (NGG) is added automatically.
             </span>
           )}
         </div>
@@ -224,7 +239,7 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
               className={clsx(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold",
                 "transition-all duration-150 hover:scale-105 active:scale-95",
-                preset.color
+                preset.color,
               )}
               title={`Load ${preset.label}: ${preset.sequence}`}
             >
@@ -243,7 +258,7 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
         className={clsx(
           "w-full btn-primary flex items-center justify-center gap-2 text-base",
           (isLoading || !isValid || sequence.length !== 20) &&
-            "opacity-50 cursor-not-allowed hover:bg-forest active:scale-100"
+            "opacity-50 cursor-not-allowed hover:bg-forest active:scale-100",
         )}
         aria-busy={isLoading}
         aria-label="Run off-target analysis"
@@ -271,8 +286,13 @@ export default function SequenceInput({ onResult, isLoading, setIsLoading }) {
           { base: "G", color: "text-amber-600", label: "Guanine" },
           { base: "C", color: "text-rose-600", label: "Cytosine" },
         ].map(({ base, color, label }) => (
-          <span key={base} className="flex items-center gap-1 text-xs text-forest/60">
-            <span className={clsx("font-mono font-bold text-sm", color)}>{base}</span>
+          <span
+            key={base}
+            className="flex items-center gap-1 text-xs text-forest/60"
+          >
+            <span className={clsx("font-mono font-bold text-sm", color)}>
+              {base}
+            </span>
             <span>{label}</span>
           </span>
         ))}
